@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="1.804">
-    <testcase classname="Verify updating department response" name="Update department response" time="0.067">
+<testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="109.594">
+    <testcase classname="Verify updating department response" name="Update department response" time="107.935">
         <system-out><![CDATA[Given navigate to nclccp application........................................passed
 When enter Username, password and click on "Login" button...................passed
 Then homepage should be displayed "UserProfile".............................passed
+When click on "vessels" offload option......................................passed
+And click on "offload" response option......................................passed
+Then offload event department response page should be displayed "oedrpage"..passed
+When enter "datavalue" and click on search button...........................passed
+And click on the "edit" option for the offload event created previously.....passed
 ]]></system-out>
     </testcase>
 </testsuite>

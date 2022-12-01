@@ -343,17 +343,17 @@ public class NCLWebActions {
         boolean flag = false;
         try {
             Wait<WebDriver> wait = new FluentWait<>(webDriver)
-                    .withTimeout(Duration.ofSeconds(10))
+                    .withTimeout(Duration.ofSeconds(20))
                     .pollingEvery(Duration.ofSeconds(1))
                     .ignoring(NoSuchElementException.class,
                             StaleElementReferenceException.class);
             wait.until(ExpectedConditions.visibilityOfAllElements(webDriver.findElements(By.xpath(locator))));
             wait = new FluentWait<>(webDriver)
-                    .withTimeout(Duration.ofSeconds(10))
+                    .withTimeout(Duration.ofSeconds(20))
                     .pollingEvery(Duration.ofSeconds(1))
                     .ignoring(NoSuchElementException.class,
                             StaleElementReferenceException.class);
-           // wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(locator)));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
             flag = true;
         } catch (Exception e) {
         }

@@ -9,9 +9,9 @@ import org.junit.runner.RunWith;
         features = "classpath:features/ccp/Usport.feature",
         plugin = {"pretty", "html:results/cucumber-reports.html", "json:results/cucumber.json", "junit:results/cucumber.xml",
                     "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"},
-        dryRun = true,
+        dryRun = false,
         glue = "com.ncl.ccp",
-        tags = "@TC-002")
+        tags = "@TC_002")
 
 
 public class TestRunnerccp {

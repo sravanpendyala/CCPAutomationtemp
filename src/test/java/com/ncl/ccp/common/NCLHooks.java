@@ -31,7 +31,7 @@ public class NCLHooks {
     @Value("${test.web.screenshot}")
     String takeScreenshot;
     @Autowired(required=true)
-    NCLWebActions NCLWebActions;
+    NCLWebActions nclWebActions;
 
     @Autowired
     NCLApiReader NCLApiReader;
@@ -70,7 +70,7 @@ public class NCLHooks {
     }
 
     private boolean isDriverLoaded() {
-        return NCLWebActions.webDriver != null;
+        return nclWebActions.webDriver != null;
     }
 
     @AfterStep
@@ -84,6 +84,10 @@ public class NCLHooks {
             case "P" -> {
                 if (!scenario.isFailed()) flag = true;
             }
+        }
+        if(flag){
+            final byte[] screenshot = ((TakesScreenshot) nclWebActions.webDriver).getScreenshotAs(OutputType.BYTES);
+            scenario.attach(screenshot, "image/png", "screenshot");
         }
     }
 
@@ -128,8 +132,8 @@ public class NCLHooks {
 
     public void closeDriver() {
         if (isDriverLoaded()) {
-            NCLWebActions.webDriver.quit();
-            NCLWebActions.webDriver = null;
+            nclWebActions.webDriver.quit();
+            nclWebActions.webDriver = null;
         }
     }
 

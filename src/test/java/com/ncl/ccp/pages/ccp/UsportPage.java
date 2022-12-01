@@ -50,12 +50,16 @@ public class UsportPage extends NCLEnvData {
                     flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Searchclick"), key);
                 }
                 case "Editoffload" -> {
+                    nclWebActions.waitForElement("UsportPage.Editoffload");
                     flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Editoffload"), key);
                 }
                 case "Numberofoffloads" -> {
+                    nclWebActions.waitForElement("UsportPage.Numberofoffloads");
                     flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Numberofoffloads"), key);
                 }
+
                 case "offloaddata" -> {
+                    nclWebActions.waitForElement("UsportPage.offloaddata");
                     flag = nclWebActions.setValue(value, getObjMap("UsportPage.offloaddata"), key);
                 }
                 case "Offloadupdate" -> {
