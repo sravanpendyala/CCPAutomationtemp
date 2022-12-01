@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="1" time="1.804">
+    <testcase classname="Verify updating department response" name="Update department response" time="0.067">
+        <system-out><![CDATA[Given navigate to nclccp application........................................passed
+When enter Username, password and click on "Login" button...................passed
+Then homepage should be displayed "UserProfile".............................passed
+]]></system-out>
+    </testcase>
+</testsuite>
