@@ -40,30 +40,25 @@ public class UsportPage extends NCLEnvData {
                     flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Searchdatavalue"), key);
                 }
                 case "Searchdatavalues" -> {
-                    nclWebActions.waitForElement("UsportPage.Numofoffloads");
-                    //flag = nclWebActions.waitForElementClose(value, getObjMap("UsportPage.Searchdatavalue"), key)
-                    flag = nclWebActions.clickValue("CLICK", getObjMap("UsportPage.Numofoffloads"), key);
-                   if (flag)
-                        flag = nclWebActions.setValue(value, getObjMap("UsportPage.Searchdatavalue"), key);
-                }
-                case "Searchclicks" -> {
-                    flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Searchclick"), key);
+                     flag = nclWebActions.setValueAndPressEnterKey(value, getObjMap("UsportPage.Searchdatavalue"), key);
                 }
                 case "Editoffload" -> {
-                    nclWebActions.waitForElement("UsportPage.Editoffload");
-                    flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Editoffload"), key);
+                        flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Editoffload"), key);
                 }
                 case "Numberofoffloads" -> {
-                    nclWebActions.waitForElement("UsportPage.Numberofoffloads");
                     flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Numberofoffloads"), key);
                 }
-
-                case "offloaddata" -> {
-                    nclWebActions.waitForElement("UsportPage.offloaddata");
-                    flag = nclWebActions.setValue(value, getObjMap("UsportPage.offloaddata"), key);
+                case "Offloaddata" -> {
+                    flag = nclWebActions.setValueAndPressEnterKey(value, getObjMap("UsportPage.offloaddatav"), key);
                 }
                 case "Offloadupdate" -> {
-                    flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Offloadupdate"), key);
+                    flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Offloadupdates"), key);
+//                    if (flag)
+//                    flag = nclWebActions.clickValue(value, getObjMap("UsportPage.Offloadupdates"), key);
+                }
+                case "Qty" -> {
+                    String a = "Yes (2)";
+                    flag = nclWebActions.clickValue(value, getObjMap("UsportPage.qty",a), key);
                 }
                 default -> {
                     throw new RuntimeException("Field " + key + " is not defined in page " + sheetName + " class");

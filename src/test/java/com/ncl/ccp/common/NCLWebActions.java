@@ -49,6 +49,12 @@ public class NCLWebActions {
         webDriver = nclWebDriver.launchApp(appURL);
         return flag;
     }
+    public boolean sendKeyboardValue(String action,String locator) {
+        boolean flag = false;
+        flag = executeCommands.elementActions(webDriver, Commands.SET_VALUE, locator, action, 10);
+        webDriver.findElement(By.xpath(locator)).sendKeys(Keys.ENTER);
+        return flag;
+    }
 
     public boolean setValue(String action, String locator, String elementName) {
         boolean flag = false;
@@ -69,6 +75,14 @@ public class NCLWebActions {
                 flag = executeCommands.elementActions(webDriver, Commands.IS_ENABLED, locator, action, 10);
                 if (!flag) errMessage = "Element " + elementName + " NOT enabled";
             }
+
+            case "CLEAR_ENTER" -> {
+                flag = executeCommands.elementActions(webDriver, Commands.CLEAR, locator, action, 10);
+                if (flag)
+                flag = executeCommands.elementActions(webDriver, Commands.SET_VALUE, locator, action, 10);
+                if (!flag) errMessage = "Element " + elementName + " NOT enabled";
+            }
+
             case "PREFILL" -> {
                 //Syntax " PREFILL|EXP_VALUE Or PREFILL|GET_VAR
                 if (value[1].equals("GET_VAR")) {
@@ -96,7 +110,56 @@ public class NCLWebActions {
 
         return flag;
     }
+    public boolean setValueAndPressEnterKey(String action, String locator, String elementName) {
+        boolean flag = false;
+        String[] value;
 
+        value = action.split("\\|");
+
+        switch (value[0]) {
+            case "IS_DISPLAYED" -> {
+                flag = executeCommands.elementActions(webDriver, Commands.IS_DISPLAYED, locator, action, 10);
+                if (!flag) errMessage = "Element " + elementName + " NOT displayed";
+            }
+            case "NOT_DISPLAYED" -> {
+                flag = executeCommands.elementActions(webDriver, Commands.IS_NOTDISPLAYED, locator, action, 10);
+                if (!flag) errMessage = "Element " + elementName + " displayed";
+            }
+            case "IS_ENABLED" -> {
+                flag = executeCommands.elementActions(webDriver, Commands.IS_ENABLED, locator, action, 10);
+                if (!flag) errMessage = "Element " + elementName + " NOT enabled";
+            }
+
+            case "PREFILL" -> {
+                //Syntax " PREFILL|EXP_VALUE Or PREFILL|GET_VAR
+                if (value[1].equals("GET_VAR")) {
+                    value[1] = NCLHooks.getRuntimeData(NCLHooks.CURR_PAGE + "." + elementName);
+                }
+
+                flag = executeCommands.elementActions(webDriver, Commands.PREFILL, locator, value[1], 10);
+                if (!flag) errMessage = "Element " + elementName + " value not matched with " + value[1];
+            }
+            case "TYPE" -> {
+                flag = executeCommands.elementActions(webDriver, Commands.JS_SET_VALUE, locator, value[1], 10);
+                if (!flag) errMessage = "Element " + elementName + " failed to set value";
+            }
+            default -> {
+                NCLHooks.setRuntimeData(NCLHooks.CURR_PAGE + "." + elementName, action);
+                executeCommands.elementActions(webDriver, Commands.CLICK, locator, action, 10);
+                executeCommands.elementActions(webDriver, Commands.CLEAR, locator, action, 10);
+                flag = executeCommands.elementActions(webDriver, Commands.SET_VALUE, locator, action, 10);
+                webDriver.findElement(By.xpath(locator)).sendKeys(Keys.ENTER);
+                ExpectedConditions.visibilityOfAllElements(webDriver.findElements(By.xpath(locator)));
+                if (!flag) errMessage = "Element " + elementName + " failed to set value";
+            }
+        }
+        if (!flag) {
+            LOGGER.info(errMessage);
+            throw new RuntimeException(errMessage);
+        }
+
+        return flag;
+    }
     public boolean selectCalender(String action, String locator, String elementName) {
         boolean flag = false;
         String[] value;
@@ -145,6 +208,18 @@ public class NCLWebActions {
                 flag = executeCommands.elementActions(webDriver, Commands.IS_ENABLED, locator, value[0], 10);
                 if (!flag) errMessage = "Element " + elementName + " NOT enabled";
             }
+            case "WAIT_CLICK" -> {
+                flag = executeCommands.elementActions(webDriver, Commands.WAIT_FOR_ELEMENT_CLICKABLE, locator, value[0], 10);
+                if (flag) {
+                    try {
+                        Thread.sleep(1000);
+                        flag = executeCommands.elementActions(webDriver, Commands.CLICK, locator, action, 10);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                  if (!flag) errMessage = "Element " + elementName + " NOT enabled";
+            }
             case "NOT_DISPLAYED" -> {
                 flag = executeCommands.elementActions(webDriver, Commands.IS_DISPLAYED, locator, action, 10);
                 if (!flag) flag = true;
@@ -159,11 +234,11 @@ public class NCLWebActions {
                     value[1] = NCLHooks.getRuntimeData(NCLHooks.CURR_PAGE + "." + elementName);
                 }
 //                else {
-//                    value[1] = AZHooks.getRuntimeData(value[1]);
+//                    value[1] = NCLHooks.getRuntimeData(value[1]);
 //                }
 
                 flag = executeCommands.elementActions(webDriver, Commands.PREFILL, locator, value[1], 10);
-                if (!flag) errMessage = "Element " + elementName + " value not mached with " + value[1];
+                if (!flag) errMessage = "Element " + elementName + " value not matched with " + value[1];
             }
             default -> {
                 flag = executeCommands.elementActions(webDriver, Commands.CLICK, locator, action, 10);
@@ -343,13 +418,13 @@ public class NCLWebActions {
         boolean flag = false;
         try {
             Wait<WebDriver> wait = new FluentWait<>(webDriver)
-                    .withTimeout(Duration.ofSeconds(20))
+                    .withTimeout(Duration.ofSeconds(2))
                     .pollingEvery(Duration.ofSeconds(1))
                     .ignoring(NoSuchElementException.class,
                             StaleElementReferenceException.class);
             wait.until(ExpectedConditions.visibilityOfAllElements(webDriver.findElements(By.xpath(locator))));
             wait = new FluentWait<>(webDriver)
-                    .withTimeout(Duration.ofSeconds(20))
+                    .withTimeout(Duration.ofSeconds(2))
                     .pollingEvery(Duration.ofSeconds(1))
                     .ignoring(NoSuchElementException.class,
                             StaleElementReferenceException.class);
